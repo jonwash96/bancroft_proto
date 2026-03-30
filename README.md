@@ -5,7 +5,8 @@ Bancroft_proto is a javascript library that appends useful methods to the built-
 
 All Bancroft_proto methods are preceded with an underdash to clearly distinguish them from built-in methods.
 
-> *Note:* as of version 1.2, not all methods are complete, and not all have been rigorously tested. Please review the source code before use, and use at your own discretion.
+> **Note:** As of version 1.2, not all methods are complete, and not all have been rigorously tested. Please review the source code before use, and use at your own discretion.
+>
 > *Known Incomplete functions:* 
 	> - epochTo(): only supports 'recent', doesn't handle 'just now'
 
@@ -17,7 +18,7 @@ You can also import it with ES6 syntax, or require it in Nodejs.
 
 For Example:
 ```html
-<!DOCTYPE=HTML>
+<!DOCTYPE HTML>
 <HTML>
 <head>
 	<meta charset="utf8">
