@@ -5,15 +5,20 @@ Bancroft_proto is a javascript library that appends useful methods to the built-
 
 All Bancroft_proto methods are preceded with an underdash to clearly distinguish them from built-in methods.
 
-> **Note:** As of version 1.2, not all methods are complete, and not all have been rigorously tested. Please review the source code before use, and use at your own discretion.
+> **Note:** As of version 1.2, All functions work, though have been rigorously tested. Please review the source code before use, and use at your own discretion.
 >
-> *Known Incomplete functions:* 
-	> - epochTo(): only supports 'recent', doesn't handle 'just now'
+> *Known Issues:* 
+> >epochTo(): only supports 'recent', doesn't handle 'just now'
 
 ## How to use in your code.
-Import the bancroft_proto script before other scripts. This adds the methods onto the built-in prototypes, making them available in subsequent scripts.
-For the most reliable results in HTML pages, it is recommended to load the script in the `<head/>` tag, with the `defer` attribute with the `text/javascript` mimetype. This will allow both text/js and module scripts to use it.
-You can also import it with ES6 syntax, or require it in Nodejs.
+1. Clone this repository into your project.
+	- `git clone https://github.com/jonwash96/bancroft_proto .`
+2. **Load the bancroft_proto script before other scripts that use it.**
+ - This adds the methods onto the built-in prototypes, making them available in subsequent scripts.
+- You can also import it with ES6 syntax, or require it in Nodejs without setting it to a variable.
+	- HTML: `<script type="text/javascript" src="./bancroft_proto"></script>`
+	- CJS: `require('./bancroft_proto')` 
+	- ES6: `import './bancroft_proto'`
 
 
 For Example:
