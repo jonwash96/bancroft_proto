@@ -98,3 +98,5 @@ For Example:
 </body>
 </HTML>
 ```
+
+***For the curious:*** *It's a conceptual play on words; If you've seen the Netflix series "Altered Carbon", and also know Javascript, then you probably get it 😉. Otherwise, that's just the name.*
