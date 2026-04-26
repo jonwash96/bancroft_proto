@@ -57,14 +57,40 @@ function dePluralize() {
 
 String.prototype._togglePlural = togglePlural;
 /** 
- * [dumb] Toggle the "s" at the end of a word, matching case.
+ * [smart] Toggle the suffix at the end of a word, matching case.
+ * Default suffix is "s".
+ * @returns { string } Copy of the initial string.
+ * @param { number } num :optional: Pass a number to pluralize based on value, otherwise add appostrophee
+ * @param { string } singular :optional: Replaces the role of 's'; Matches param & swaps the match on toggle.
+ * - Example: 'Box'._togglePlural(2, 'es') ➜ 'Boxes'._togglePlural(1, 'es')  ➜ 'Box'
+ * @param { string } singlular :optional: If plural is set, swaps one match for the next, else adds plural if not exist. 
+ * - Example: 'Cranberry'._togglePlural(21, 'ies', 'y') ➜ 'Cranberries'
+ * - Example: 'Geese'._togglePlural(1, 'eese', 'oose') ➜ 'Goose'
+ * - Example: 'Bus'._togglePlural(4321, 'es') ➜ 'Buses'._togglePlural(32, 'es') ➜ 'Buses'
+ * - Example: 'Quiz'._togglePlural(null, 'zes') ➜ 'Quizzes'._togglePlural(null, 'zes') ➜ 'Quiz'
  */
-function togglePlural() {
-    if (this.match(/.+s$/i)) 
-		return this.replace(/(?<=.+)s$/i, '')
-    else return this.match(/[a-z]/) 
-        ? this + "s" 
-        : this + "S";
+function togglePlural(num, plural=null, singular=null) {
+    const isPlural    = RegExp(`(?<=.+)${plural}$`, 'i').test(this);
+    const isSingular  = RegExp(`(?<=.+)${singular}$`, 'i').test(this);
+    const endsWith_S  = /(?<=.+)s$/i.test(this);
+    const matchCase_suffix = (which) => /[a-z]/.test(this.at(-1)) ? which.toLowerCase() : which.toUpperCase();
+    const matchCase_S = () => this + (/[a-z]/.test(this) ? "s" : "S");
+    const regex  = (which) => RegExp(`(?<=.+)${which}$`);
+
+    if (singular && !plural) {
+        console.warn("@togglePlural: Either only plural (arg 2), both plural & singular (args 2 & 3), or neighther must be set. Got:", {plural, singular});
+        return this
+    }
+
+    if (isPlural) return num 
+        ? num === 1 ? this.replace(regex(plural), matchCase_suffix(singular)) : this
+        : this.replace(regex(plural), singular ? matchCase_suffix(singular) : '');
+    else if (isSingular) return num && num === 1
+        ? this
+        : this.replace(regex(singular), matchCase_suffix(plural));
+    else return num /* if neither are set or string doesn't match: */
+        ? endsWith_S ? (num === 1 ? this.slice(0, this.length -1) : this) : matchCase_S()
+        : endsWith_S ? this.slice(0, this.length -1) : matchCase_S();
 }
 
 
@@ -167,11 +193,12 @@ Number.prototype._cfk = cfk;
  */
 function cfk(from, onto, units=true, fixed=2) {
 	let result, c;
+	const num = parseFloat(this);
 	
 	switch (from.toLowerCase()) {
-		case 'c': c = this; 					break;
-		case 'f': c = (this - 32) * (5 / 9); 	break;
-		case 'k': c = this - 273.15; 			break;
+		case 'c': c = num; 					break;
+		case 'f': c = (num - 32) * (5 / 9); 	break;
+		case 'k': c = num - 273.15; 			break;
 	}
 	
 	switch (onto.toLowerCase()) {

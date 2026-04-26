@@ -1,5 +1,5 @@
 # Bancroft_proto
-v1.2
+v1.2.1
 
 Bancroft_proto is a javascript library that appends useful methods to the built-in the String & Number prototypes.
 
@@ -9,6 +9,11 @@ All Bancroft_proto methods are preceded with an underdash to clearly distinguish
 >
 > *Known Issues:* 
 > >epochTo(): only supports 'recent', doesn't handle 'just now'
+
+***
+
+> *Changelog:*
+> - v1.2.1: togglePlural() update: Supports params for count & alt suffixes.
 
 ## How to use in your code.
 1. Clone this repository into your project.
@@ -54,6 +59,16 @@ For Example:
 			<b>Temp Is:</b>
 			56°F (329.15°K)
 		</span>
+		<span>
+			<b>Temp Is:</b>
+			56°F (329.15°K)
+		</span>
+		<span>
+			<b>Fruit Is</b>
+			Quantity of: 10682 = cranberries
+			Quantity of: 1 = cranberry
+			Quantity of: 5 = Cranberrys
+		</span>
 	</p>
 
 <script type="text/javascript">
@@ -72,6 +87,12 @@ For Example:
 		third: {
 			title: "temp-is",
 			content: 56
+		},
+		fourth: {
+			title: "fruitIs",
+			quantityA: 10682,
+			quantityB: 1,
+			content: "cranberry"
 		}
 	};
 
@@ -88,11 +109,21 @@ For Example:
 		</span><br>
 		<span>
 			<b>${myObj.second.title._toTitleCase('_','-')}</b>
-			${myObj.second.content.split(' ').map(str => str.match(/\d+/) ? str._cfk('f', 'C', true, 1) : str).join(' ')}
+			${myObj.second.content.split(' ')
+				.map(str => str.match(/\d+/) 
+					? str._cfk('f', 'C', true, 1) 
+					: str
+			).join(' ')}
 		</span><br>
 		<span>
 			<b>${myObj.third.title._toTitleCase('-')}</b>
 			${myObj.third.content}°F (${myObj.third.content._cfk('f', 'K')})
+		</span>
+		<span>
+			<b>${myObj.fourth.title._camelToTitle()}</b>
+			Quantity of: ${myObj.fourth.quantityA} = ${myObj.fourth.content._togglePlural(myObj.fourth.quantityA, 'ies', 'y')}<br/>
+			Quantity of: ${myObj.fourth.quantityB} = ${myObj.fourth.content._togglePlural(myObj.fourth.quantityB, 'ies', 'y')}<br/>
+			Quantity of: 5 = ${myObj.fourth.content._togglePlural(5)._toTitleCase()}
 		</span>`;
 </script>
 </body>
