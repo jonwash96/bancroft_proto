@@ -70,8 +70,8 @@ String.prototype._togglePlural = togglePlural;
  * - Example: 'Quiz'._togglePlural(null, 'zes') ➜ 'Quizzes'._togglePlural(null, 'zes') ➜ 'Quiz'
  */
 function togglePlural(num, plural=null, singular=null) {
-    const isPlural    = RegExp(`(?<=.+)${plural}$`, 'i').test(this);
-    const isSingular  = RegExp(`(?<=.+)${singular}$`, 'i').test(this);
+    const isPlural    = plural ? RegExp(`(?<=.+)${plural}$`, 'i').test(this) : this.at(-1) === 's';
+    const isSingular  = singular ? RegExp(`(?<=.+)${singular}$`, 'i').test(this) : !isPlural;
     const endsWith_S  = /(?<=.+)s$/i.test(this);
     const matchCase_suffix = (which) => /[a-z]/.test(this.at(-1)) ? which.toLowerCase() : which.toUpperCase();
     const matchCase_S = () => this + (/[a-z]/.test(this) ? "s" : "S");
@@ -82,14 +82,22 @@ function togglePlural(num, plural=null, singular=null) {
         return this
     }
 
-    if (isPlural) return num 
-        ? num === 1 ? this.replace(regex(plural), matchCase_suffix(singular)) : this
-        : this.replace(regex(plural), singular ? matchCase_suffix(singular) : '');
-    else if (isSingular) return num && num === 1
-        ? this
-        : this.replace(regex(singular), matchCase_suffix(plural));
+	if (plural) {
+		if (isPlural) return num 
+			? num === 1 
+				? this.replace(regex(plural), matchCase_suffix(singular ?? '')) 
+				: String(this)
+			: this.replace(regex(plural), matchCase_suffix(singular ?? ''));
+		else if (isSingular) return num && num === 1
+			? String(this)
+			: singular 
+				? this.replace(regex(singular), matchCase_suffix(plural ?? 's'))
+				: this + plural;
+	}
     else return num /* if neither are set or string doesn't match: */
-        ? endsWith_S ? (num === 1 ? this.slice(0, this.length -1) : this) : matchCase_S()
+        ? endsWith_S 
+			? num === 1 ? this.slice(0, this.length -1) : String(this)
+			: num === 1 ? String(this) : matchCase_S()
         : endsWith_S ? this.slice(0, this.length -1) : matchCase_S();
 }
 
